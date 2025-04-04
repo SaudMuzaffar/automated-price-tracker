@@ -1,0 +1,3 @@
+[console_scripts]
+price-tracker-api = api.app:create_app
+

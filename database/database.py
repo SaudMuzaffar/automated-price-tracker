@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import psycopg2
 from psycopg2.extras import RealDictCursor
+from datetime import datetime, timedelta
 
 # ✅ Force load .env from the exact absolute path
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -14,6 +15,7 @@ print("🔗 Using DATABASE_URL:", DATABASE_URL)
 
 def get_connection():
     return psycopg2.connect(os.getenv("DATABASE_URL"), cursor_factory=RealDictCursor)
+
 
 def create_tables():
     with get_connection() as conn:
@@ -35,7 +37,8 @@ def create_tables():
             """)
             conn.commit()
         print("✅ Tables created!")
-    
+
+
 def insert_product(name, url):
     with get_connection() as conn:
         with conn.cursor() as cur:
@@ -48,6 +51,7 @@ def insert_product(name, url):
             result = cur.fetchone()
             return result['product_id'] if result else None
 
+
 def insert_price(product_id, price):
     with get_connection() as conn:
         with conn.cursor() as cur:
@@ -55,6 +59,7 @@ def insert_price(product_id, price):
                 INSERT INTO price_history (product_id, price)
                 VALUES (%s, %s);
             """, (product_id, price))
+
 
 def get_price_history(product_id):
     with get_connection() as conn:
@@ -66,44 +71,39 @@ def get_price_history(product_id):
                 ORDER BY date_checked;
             """, (product_id,))
             return cur.fetchall()
+
+
 def get_all_products():
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT product_id, name FROM products
-                ORDER BY name
+                SELECT product_id, name, url
+                FROM products
+                ORDER BY name;
             """)
             return cur.fetchall()
 
 
-
-
-
-# OPTIONAL: Run this if you call python database/database.py directly
+# 🧪 Test block: ONLY runs if you run this file directly
 if __name__ == "__main__":
     create_tables()
 
-    # Test insert
-    pid = insert_product("Oppo Reno 13F 4g-Graphite Grey-256GB - 8GB RAM", "https://example.com/oppo13f")
+    pid = insert_product(
+        "Oppo Reno 13F 4g-Graphite Grey-256GB - 8GB RAM",
+        "https://example.com/oppo13f"
+    )
 
     if pid:
-        # Insert historical prices with slightly different timestamps
-        import time
-        from datetime import datetime, timedelta
-
-    now = datetime.now()
-    for i, price in enumerate([79999, 74999, 69999, 64999]):
+        now = datetime.now()
+        for i, price in enumerate([79999, 74999, 69999, 64999]):
             fake_date = now - timedelta(days=i)
             with get_connection() as conn:
-             with conn.cursor() as cur:
-                cur.execute("""
-                    INSERT INTO price_history (product_id, price, date_checked)
-                    VALUES (%s, %s, %s);
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        INSERT INTO price_history (product_id, price, date_checked)
+                        VALUES (%s, %s, %s);
                     """, (pid, price, fake_date))
 
-
-    print(f"✅ Inserted 4 prices for product_id {pid}")
-    history = get_price_history(pid)
-    print("📈 Price History:", history)
-
-
+        print(f"✅ Inserted 4 prices for product_id {pid}")
+        history = get_price_history(pid)
+        print("📈 Price History:", history)

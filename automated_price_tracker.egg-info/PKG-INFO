@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: automated-price-tracker
+Version: 1.0.0
+Summary: Automated Price Tracker with Flask API, Streamlit dashboard, and Selenium scraper.
+Home-page: UNKNOWN
+Author: Mohammad Saud
+License: UNKNOWN
+Keywords: flask streamlit scraper selenium price-tracker
+Platform: UNKNOWN
+Requires-Python: >=3.8
+
+UNKNOWN
+

@@ -1,0 +1,11 @@
+flask
+flask-restx
+APScheduler
+selenium
+python-dotenv
+requests
+psycopg2-binary
+beautifulsoup4
+streamlit
+plotly
+pandas
