@@ -1,106 +1,92 @@
-# automated-price-tracker
-# 🏷️ Automated Price Tracker
+# 📈 Automated Price Tracker
 
-A full-stack Python application that automatically tracks product prices from e-commerce sites, stores historical data, and lays the foundation for future dashboards, APIs, and alerts.
-
----
-
-## 🚀 Features (Planned)
-
-- ✅ Scrapes product prices using Python
-- ✅ Stores product and price history in PostgreSQL
-- ✅ Dockerized with complete `docker-compose` setup
-- ⏳ Visual dashboard with Streamlit (coming soon)
-- ⏳ REST API with Flask (coming soon)
-- ⏳ Scheduled automation using cron (coming soon)
-- ⏳ Email alerts when price drops (optional bonus)
+A full-stack Python app that tracks product prices from [iShopping.pk](https://www.ishopping.pk/), stores history in PostgreSQL, and visualizes trends using Streamlit + Plotly.
 
 ---
 
-## 🧱 Tech Stack
+## 🧩 Features
 
-- **Backend:** Python 3.11
-- **Database:** PostgreSQL 14
-- **Scraping Tools:** `BeautifulSoup` or `Selenium` (TBD)
-- **DevOps:** Docker & Docker Compose
-- **Environment Config:** `python-dotenv`
+- ✅ Scrapes product data using Selenium
+- ✅ Stores price history in PostgreSQL
+- ✅ Interactive dashboard built with Streamlit
+- ✅ Runs fully inside Docker
+- ✅ Designed for future automation (via cron or n8n)
 
 ---
 
-## 🗂️ Project Structure
+## 🛆 Tech Stack
 
-```
-automated-price-tracker/
-│
-├── database/
-│   └── database.py         # DB functions: create, insert, fetch
-├── .env                    # Secure DB URL
-├── Dockerfile              # Docker config for app
-├── docker-compose.yml      # App + DB containers
-├── requirements.txt        # Python dependencies
-└── README.md
+- Python 3.11
+- Selenium
+- BeautifulSoup
+- PostgreSQL
+- Streamlit
+- Plotly
+- Docker & Docker Compose
+
+---
+
+## 🚀 How to Run (Dockerized)
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/your-username/automated-price-tracker.git
+cd automated-price-tracker
 ```
 
----
+### 2. Add environment config
 
-## ⚙️ Environment Setup
-
-Create a `.env` file in the root directory:
+Create a `.env` file:
 
 ```env
 DATABASE_URL=postgresql://postgres:password@db:5432/pricetracker
 ```
 
----
+### 3. Build and run
 
-## 🐳 Run the App with Docker
-
-1. **Build the containers:**
 ```bash
-docker compose build
+docker compose up --build
 ```
 
-2. **Run the application:**
+- Dashboard will be live at: [http://localhost:8501](http://localhost:8501)
+- Database runs inside Docker at `localhost:5432`
+
+---
+
+## 🛠️ Modules
+
+| Module     | Purpose                               |
+|------------|----------------------------------------|
+| `scraper`  | Scrapes product prices from Daraz/iShopping |
+| `database` | Handles PostgreSQL DB operations       |
+| `dashboard`| Streamlit UI for price trends          |
+| `Docker`   | Containers all services                |
+
+---
+
+## 🧪 Sample Product (iShopping)
+
 ```bash
-docker compose up
-```
-
-Your app will:
-- Spin up a Postgres DB
-- Create tables automatically
-- Insert a sample product and price
-- Print price history in logs
-
----
-
-## 📈 Example Output
-
-```
-✅ Tables created!
-✅ Inserted product + price
-📊 Price History: [{'price': Decimal('999.99'), 'date_checked': datetime.datetime(…)}]
+docker compose run app python scraper/scraper.py
 ```
 
 ---
 
-## ✨ What's Next?
+## 🔮 Coming Soon
 
-- [ ] Build `scraper.py` to fetch real product prices
-- [ ] Hook it into the database module
-- [ ] Develop the Streamlit dashboard
-- [ ] Add Flask API endpoints
-- [ ] Set up cron jobs for daily runs
-
----
-
-## 🤝 Contributing
-
-This project is still in its early stages. Contributions, suggestions, and pull requests are welcome!
+- Email alerts on price drops
+- Cron-based automation
+- Airtable or Google Sheets export
+- Multi-store price comparison
 
 ---
 
-## 📜 License
+## 📄 License
 
-Free License © 2025 Mohammad Saud Muzaffar
+ License — free to use, modify, share.
 
+---
+
+Made with ❤️ by [Saud Muzaffar](mailto:saudmuzaffar@gmail.com)
 
