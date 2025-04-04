@@ -1,0 +1,16 @@
+# Ignore venv and system files
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.DS_Store
+
+# Ignore local config files
+.env
+*.log
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+*.swp

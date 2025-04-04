@@ -16,11 +16,14 @@ services:
   app:
     build:
       context: .
+      dockerfile: Dockerfile
     depends_on:
       - db
     env_file:
       - .env
-    command: python3 database/database.py
+    ports:
+      - "5050:5000"
+
 
   dashboard:
     build:
