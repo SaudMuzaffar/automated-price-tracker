@@ -1,9 +1,16 @@
+import os
+from dotenv import load_dotenv
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
+# ✅ Force load .env from the exact absolute path
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+ENV_PATH = os.path.join(BASE_DIR, '.env')
+load_dotenv(dotenv_path=ENV_PATH)
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+print("🔗 Using DATABASE_URL:", DATABASE_URL)
+
 
 def get_connection():
     return psycopg2.connect(os.getenv("DATABASE_URL"), cursor_factory=RealDictCursor)
@@ -59,20 +66,44 @@ def get_price_history(product_id):
                 ORDER BY date_checked;
             """, (product_id,))
             return cur.fetchall()
+def get_all_products():
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT product_id, name FROM products
+                ORDER BY name
+            """)
+            return cur.fetchall()
+
+
 
 
 
 # OPTIONAL: Run this if you call python database/database.py directly
 if __name__ == "__main__":
     create_tables()
-    
-    # Test insert
-    pid = insert_product("iPhone 15 Pro", "https://example.com/iphone15pro")
-    if pid:
-        insert_price(pid, 999.99)
-        print("✅ Inserted product + price")
 
-    # Fetch and print history
+    # Test insert
+    pid = insert_product("Oppo Reno 13F 4g-Graphite Grey-256GB - 8GB RAM", "https://example.com/oppo13f")
+
+    if pid:
+        # Insert historical prices with slightly different timestamps
+        import time
+        from datetime import datetime, timedelta
+
+    now = datetime.now()
+    for i, price in enumerate([79999, 74999, 69999, 64999]):
+            fake_date = now - timedelta(days=i)
+            with get_connection() as conn:
+             with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO price_history (product_id, price, date_checked)
+                    VALUES (%s, %s, %s);
+                    """, (pid, price, fake_date))
+
+
+    print(f"✅ Inserted 4 prices for product_id {pid}")
     history = get_price_history(pid)
     print("📈 Price History:", history)
+
 
